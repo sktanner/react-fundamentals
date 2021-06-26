@@ -1,32 +1,49 @@
 import { useState } from "react"
+import PropTypes from 'prop-types'
 
 const PropsDemo = () => {
-    const [ color, setColor ] = useState('white')
-    const [ backgroundColor, setBackgroundColor ] = useState('purple')
-    const [ borderRadius, setBorderRadius ] = useState('5px')
-    const [ borderStyle, setBorderStyle ] = useState('dashed')
-    const [ display, setDisplay ] = useState('inline-block')
-    const [ width, setWidth ] = useState('350px')
-    const [ textAlign, setTextAlign ] = useState ('center')
+    const [color, setColor] = useState('white')
+    const [backgroundColor, setBackgroundColor] = useState('purple')
+    const [borderRadius, setBorderRadius] = useState('5px')
+    const [borderStyle, setBorderStyle] = useState('dashed')
+    const [display, setDisplay] = useState('inline-block')
+    const [width, setWidth] = useState('350px')
+    const [textAlign, setTextAlign] = useState('center')
 
     let styles = {
-        color : color,
-        backgroundColor : backgroundColor,
-        borderRadius : borderRadius,
-        borderStyle : borderStyle,
-        display : display,
-        width : width,
-        textAlign : textAlign
+        color: color,
+        backgroundColor: backgroundColor,
+        borderRadius: borderRadius,
+        borderStyle: borderStyle,
+        display: display,
+        width: width,
+        textAlign: textAlign
     }
 
-    return(
+    const toggleColor = () => {
+        color === 'white' ? setColor('pink') : setColor('white')
+    }
+
+    const toggleBackgroundColor = () => {
+        backgroundColor === 'purple' ? setBackgroundColor('black') : setBackgroundColor('purple')
+    }
+
+    const toggleBorderRadius = () => {
+        borderRadius === '5px' ? setBorderRadius('20px') : setBorderRadius('5px')
+    }
+
+    const toggleBorderStyle = () => {
+        borderStyle === 'dashed' ? setBorderStyle('double') : setBorderStyle('dashed')
+    }
+
+    return (
         <div className='main'>
             <div className='mainDiv'>
                 <div style={styles}>
-                <FunctionalComponent string='will this display?' />
-                <FunctionalComponent string='props are pretty cool, right?' />
-                <FunctionalComponent string='you can send data from one component...' />
-                <FunctionalComponent string='... to another' />
+                    <FunctionalComponent string='Color Toggle' function={toggleColor} selectedStyle={color} />
+                    <FunctionalComponent string='Background Color Toggle' function={toggleBackgroundColor} selectedStyle={backgroundColor} />
+                    <FunctionalComponent string='Border Radius Toggle' function={toggleBorderRadius} selectedStyle={borderRadius} />
+                    <FunctionalComponent string='Border Style Toggle' function={toggleBorderStyle} selectedStyle={borderStyle} />
                 </div>
             </div>
         </div>
@@ -36,9 +53,25 @@ const PropsDemo = () => {
 export default PropsDemo
 
 const FunctionalComponent = (props) => {
-    return(
+    return (
         <div>
             <p>{props.string}</p>
+            <button onClick={props.function}>Toggle Style</button>
+            <TinyComponent selectedStyle={props.selectedStyle} />
         </div>
     )
+}
+
+const TinyComponent = (props) => {
+    return (
+        <div>
+            <p>The current style is : {props.selectedStyle}</p>
+        </div>
+    )
+}
+
+FunctionalComponent.defaultProps = {
+    string: PropTypes.string.isRequired,
+    function: PropTypes.func.isRequired,
+    selectedStyle: PropTypes.string.isRequired
 }
